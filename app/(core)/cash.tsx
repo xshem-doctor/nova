@@ -11,7 +11,7 @@ export default function CashIn() {
 
   const handleValidateDeposit = async () => {
   const token = await AsyncStorage.getItem('Token'); // or however you store JWT
-  const response = await fetch('http://127.0.0.1:8000/api/validate-deposit/', {
+  const response = await fetch('https://novaplatform.pythonanywhere.com/api/validate-deposit/', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,

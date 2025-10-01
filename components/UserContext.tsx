@@ -44,7 +44,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchUser = async () => {
       try {
         const token = await AsyncStorage.getItem('Token');
-        const response = await fetch('http://127.0.0.1:8000/api/user/', {
+        const response = await fetch('https://novaplatform.pythonanywhere.com/api/user/', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
