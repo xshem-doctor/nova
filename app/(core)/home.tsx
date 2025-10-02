@@ -5,21 +5,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Card, Text } from 'react-native-paper';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useUser } from '@/components/UserContext';
 import ErrorDialog from '@/components/ErrorDialog';
+import { Linking } from 'react-native';
 
 export default function Home() {
- const [errorVisible, setErrorVisible] = useState(false);
-     const [errorMessage, setErrorMessage] = useState('');
- 
+  const { user, loading } = useUser();
+  const [referralUrl, setReferralUrl] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  
+  useEffect(() => {
+    if (user?.referral_code) {
+      Linking.getInitialURL().then((url) => {
+        const baseUrl = window.location.origin;
+        const fullReferral = `${baseUrl}/signup?ref=${user.referral_code}`;
+        setReferralUrl(fullReferral);
+      });
+    }
+  }, [user]);
+
+
      const showError = (msg: string) => {
        setErrorMessage(msg);
        setErrorVisible(true);
      };
+     
 
 
-  const { user, loading } = useUser();
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -36,6 +50,7 @@ export default function Home() {
       </View>
     );
   }
+  
 
   return (
     <ScrollView>
@@ -65,7 +80,7 @@ export default function Home() {
                       mode="outlined"
 
               onPress={() => {
-                Clipboard.setString(user.referral_code);
+                Clipboard.setString(referralUrl);
                showError('تم نسخ العنوان إلى الحافظة');
               }}
               style={styles.button}

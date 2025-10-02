@@ -1,8 +1,10 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import ArabicText from '../../components/ArabicText';
+import ErrorDialog from '@/components/ErrorDialog';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function SignUp() {
     const [errorVisible, setErrorVisible] = useState(false);
@@ -12,6 +14,16 @@ export default function SignUp() {
       setErrorMessage(msg);
       setErrorVisible(true);
     };
+
+    const { ref } = useLocalSearchParams();
+
+    useEffect(() => {
+      if (typeof ref === 'string') {
+        setReferralCode(ref);
+      }
+    }, [ref]);
+
+
   const handleRegister = async () => {
   try {
     const response = await fetch('https://novaplatform.pythonanywhere.com/api/register/', {
@@ -48,6 +60,13 @@ export default function SignUp() {
 
   return (
     <View style={styles.container}>
+    <ErrorDialog
+          visible={errorVisible}
+          message={errorMessage}
+          onDismiss={() => setErrorVisible(false)}
+        />
+
+
       <Text style={[styles.title, { color: theme.colors.primary }]}>إنشاء حساب جديد</Text>
 
       <TextInput

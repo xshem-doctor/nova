@@ -51,13 +51,39 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem('Token');
-        const response = await fetch('https://novaplatform.pythonanywhere.com/api/user/', {
+  try {
+    let token = await AsyncStorage.getItem('Token');
+    const refreshToken = await AsyncStorage.getItem('RefreshToken');
+
+    let response = await fetch('https://novaplatform.pythonanywhere.com/api/user/', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // If token expired, try refreshing
+    if (response.status === 401 && refreshToken) {
+      const refreshRes = await fetch('https://novaplatform.pythonanywhere.com/api/token/refresh/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh: refreshToken }),
+      });
+
+      const refreshData = await refreshRes.json();
+      if (refreshRes.ok && refreshData.access) {
+        token = refreshData.access;
+        await AsyncStorage.setItem('Token', token ?? '');
+
+        // Retry user fetch with new token
+        response = await fetch('https://novaplatform.pythonanywhere.com/api/user/', {
           headers: { Authorization: `Bearer ${token}` },
         });
+      } else {
+        await AsyncStorage.multiRemove(['Token', 'RefreshToken']);
+        router.replace('/(auth)/login');
+        return;
+      }
+    }
 
-        const data = await response.json();
+    const data = await response.json();
 
         if (response.ok) {
           setUser({

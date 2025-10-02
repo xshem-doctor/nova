@@ -34,6 +34,8 @@ export default function Login() {
     const data = await response.json();
     if (response.ok && data.access) {
       await AsyncStorage.setItem('Token', data.access);
+      await AsyncStorage.setItem('RefreshToken', data.refresh);
+
       router.replace('../(core)/home');
     } else {
       showError('فشل تسجيل الدخول: ' + (data.detail || 'تحقق من البيانات المدخلة'));
