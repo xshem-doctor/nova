@@ -4,6 +4,7 @@ import { Text, Avatar, Button, Divider, List, Card } from 'react-native-paper';
 import { useUser } from '@/components/UserContext';
 import { router } from 'expo-router';
 import ArabicText from '@/components/ArabicText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const ProfileScreen = () => {
 
 
@@ -25,10 +26,11 @@ const ProfileScreen = () => {
       );
     }
 
-
-  if (!user?.investments?.length) {
-    return <Text style={{ textAlign: 'center', marginTop: 20 }}>لا يوجد استثمار حالي</Text>;
-  }
+    const handleLogout = async () => {
+      await AsyncStorage.removeItem('Token')
+      await AsyncStorage.removeItem('authToken')
+      router.replace('/(auth)/login')
+    }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -48,7 +50,7 @@ const ProfileScreen = () => {
       <List.Item
         title=": الحالة"
         right={props => <List.Icon {...props} icon="check-decagram" />}
-        left={props =>  <ArabicText>{user.is_vip ? 'vip' : 'not vip'}</ArabicText>}
+        left={props =>  <ArabicText>{user.is_vip === '1' ? 'نشط' : ' غير نشط تحتاج الإيداع'}</ArabicText>}
       />
 
       <List.Item
@@ -63,8 +65,12 @@ const ProfileScreen = () => {
         left={props =>  <ArabicText>{user.vip_users}</ArabicText>}
       />
 
+
 <View style={styles.container}>
+  
   {user.investments.map((inv, index) => {
+    
+
     let rank = '';
     switch (inv.percent) {
       case '20': rank = 'فضي'; break;
@@ -73,8 +79,10 @@ const ProfileScreen = () => {
       case '50': rank = 'ألماسي'; break;
       default: rank = 'غير معروف';
     }
-
-    return (
+if (!user?.investments?.length) {
+      return <Text style={{ textAlign: 'center', marginTop: 20 }}>لا يوجد استثمار حالي</Text>;
+    } else
+      return (
       <View key={index}>
         <Text style={styles.title}>الاستثمار {index + 1}</Text>
 
@@ -122,7 +130,7 @@ const ProfileScreen = () => {
 
 
 
-      <Button mode="contained" style={styles.button}>
+      <Button mode="contained" style={styles.button} onPress={handleLogout}>
         تسجيل الخروج 
       </Button>
     </ScrollView>

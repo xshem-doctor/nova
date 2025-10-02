@@ -32,7 +32,7 @@ export default function StakingCalculator() {
     }
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/invest/', {
+      const res = await fetch('https://novaplatform.pythonanywhere.com/api/invest/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -21,12 +21,7 @@ const InvestmentBox: React.FC<InvestmentBoxProps> = ({ title, text1, text2, text
             <Text>{text3}</Text>
         </View>
       
-        <View>
-            <Button
-                    style={styles.button}>
-                      استثمر
-            </Button>
-          </View>
+
 
         </View>
         

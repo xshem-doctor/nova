@@ -36,10 +36,10 @@ export default function Home() {
           left={(props) => <Avatar.Text {...props} label={user.name[0]} />}
         />
         <Card.Content>
-          <Text style={styles.label}>💰 الرصيد</Text>
+          <Text style={styles.label}> الرصيد</Text>
           <Text style={styles.value}>{user.balance}</Text>
 
-          <Text style={styles.label}>🔗 عنوان المحفظة</Text>
+          <Text style={styles.label}> عنوان المحفظة</Text>
           <Text style={styles.value}>{user.wallet}</Text>
 
           <Text style={styles.label}> كود الإحالة</Text>

@@ -60,11 +60,10 @@ export default function Login() {
 
       <TextInput
       
-        label="البريد الإلكتروني"
+        label="اسم المستخدم"
         value={email}
         onChangeText={setEmail}
         mode="outlined"
-        keyboardType="email-address"
         style={styles.input}
       />
 

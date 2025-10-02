@@ -6,9 +6,19 @@ import { Appbar, Button, Card, RadioButton } from 'react-native-paper';
 import { useUser } from '@/components/UserContext';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ErrorDialog from '@/components/ErrorDialog';
+import { useState } from 'react';
 
 export default function CashIn() {
 
+
+const [errorVisible, setErrorVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const showError = (msg: string) => {
+      setErrorMessage(msg);
+      setErrorVisible(true);
+    };
   const handleValidateDeposit = async () => {
   const token = await AsyncStorage.getItem('Token'); // or however you store JWT
   const response = await fetch('https://novaplatform.pythonanywhere.com/api/validate-deposit/', {
@@ -24,12 +34,12 @@ export default function CashIn() {
 
   if (response.ok) {
     if (data.txid) {
-      Alert.alert('🎉 تم إرسال المكافأة', `تم إرسال ${data.reward} USDT إلى المُحيل`);
+      showError("المعاملة تمت " + data.txid);
     } else {
-      Alert.alert('✅ تم التحقق', data.message || 'أنت الآن VIP');
+      showError(' المعاملة تمت' + data.message || 'حسابك نشط الأن');
     }
   } else {
-    Alert.alert('❌ خطأ', data.error || data.message || 'فشل التحقق');
+    showError(' خطأ' +  data.message || data.error  || 'فشل التحقق');
   }
 };
 
@@ -56,8 +66,7 @@ export default function CashIn() {
     switch (value) {
       case 'TRX':
         return user.wallet;
-      case 'USDT':
-        return user.wallet;
+
       default:
         return 'الرجاء اختيار نوع الإيداع';
     }
@@ -70,6 +79,8 @@ export default function CashIn() {
     }
   };
 
+  const isDepositMade = parseFloat(user.balance || '0') > 0;
+
    const lines = [
     'عنوان الإيداع أعلاه هو عنوان محفظتك على المنصة ستكون مسؤول عن فقدان الأموال في حال الإيداع الخطأ عليها', 
     'الرجاء تحديد نوع العملة التي تريد الإيداع من خلالها ثم تحويل المبلغ المراد إيداعه على العنوان الظاهر', 
@@ -78,6 +89,11 @@ export default function CashIn() {
 
   return (
     <>
+    <ErrorDialog
+          visible={errorVisible}
+          message={errorMessage}
+          onDismiss={() => setErrorVisible(false)}
+        />
     <ScrollView>
       <Appbar.Header>
         <Appbar.Content title="المحفظة" style={{ justifyContent: "center", alignItems: "center" }} />
@@ -86,7 +102,6 @@ export default function CashIn() {
       <View style={styles.container}>
         <RadioButton.Group onValueChange={setValue} value={value}>
           <RadioButton.Item label="TRX" value="TRX" />
-          <RadioButton.Item label="USDT" value="USDT" />
         </RadioButton.Group>
 
         <ArabicText style={styles.message}>{getMessage()}</ArabicText>
@@ -100,10 +115,21 @@ export default function CashIn() {
           نسخ العنوان
         </Button>
 
-        <Button mode="outlined" onPress={handleValidateDeposit}>
+        <Button mode="outlined" onPress={handleValidateDeposit}   disabled={!isDepositMade}>
           تأكيد الإيداع
+          
         </Button>
+                
         </View>
+
+        {!isDepositMade && (
+          <ArabicText style={{ color: 'red', fontSize: 12,   flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',}}>
+      لم تقم بالإيداع بعد
+                قم بالأيداع وتحديث الصفحة الرئيسية ثم تأكيد الإيداع
+          </ArabicText>
+        )}
       </View>
 
       <Card style={styles.card}>
