@@ -50,7 +50,6 @@ export default function Home() {
       </View>
     );
   }
-  
 
   return (
     <ScrollView>
@@ -68,6 +67,7 @@ export default function Home() {
         <Card.Content>
           <Text style={styles.label}> الرصيد</Text>
           <Text style={styles.value}>{user.balance}</Text>
+          <Text style={styles.msg}>{user?.investments?.length ? 'الرصيد مقفل حتى انتهاء الاستثمار' : ""}</Text>
 
           <Text style={styles.label}> عنوان المحفظة</Text>
           <Text style={styles.value}>{user.wallet}</Text>
@@ -155,6 +155,12 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginTop: 10,
     color: '#555',
+  },
+  msg : {
+    fontSize: 10,
+    textAlign: 'right',
+    marginTop: 10,
+    color: '#f71414ff',
   },
   value: {
     fontSize: 18,

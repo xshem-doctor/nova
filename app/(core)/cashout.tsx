@@ -29,7 +29,7 @@ export default function CashOut() {
     }
 
     if (parseFloat(amount) > parseFloat(user?.referral_reward_total || '0')) {
-      showError(`لا تملك هذه الأرباح أرباحك الأن ` + `${user?.referral_reward_total}`);
+      showError(`لا تملك هذه الأرباح تأكد من وقت انتهاء الاستثمار, أرباحك الأن ` + `${user?.referral_reward_total}`);
       return
     }
 

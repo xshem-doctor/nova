@@ -29,11 +29,14 @@ export default function StakingCalculator() {
   const [token, setToken] = useState('');
   const [investmentData, setInvestmentData] = useState(null);
 
-  useEffect(() => {
-    AsyncStorage.getItem('Token').then((t) => {
-      if (t) setToken(t);
-    });
-  }, []);
+    useEffect(() => {
+      const loadToken = async () => {
+        const t = await AsyncStorage.getItem('Token');
+        if (t) setToken(t);
+      };
+      loadToken();
+    }, []);
+
 
   const parsedAmount = parseFloat(amount);
   const tier = !isNaN(parsedAmount) ? tiers.find(t => parsedAmount >= t.min && parsedAmount <= t.max) : null;
@@ -61,9 +64,9 @@ export default function StakingCalculator() {
       });
 
       const data = await res.json();
-      if (data.success) {
+      if (data.rank) {
         setInvestmentData(data);
-        showError('✅ تم الاستثمار' + `الربح اليومي: ${data.daily_reward} `);
+        showError(' المعاملة تمت يمكنك متابعة الاستثمار داخل الملف الشخصي' + ` يمكنك السحب بتاريخ  ${data.locked_until} \n ${data.daily_reward} الربح اليومي`);
       } else {
         showError('❌ خطأ' + data.message || data.error);
       }
