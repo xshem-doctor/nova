@@ -29,7 +29,7 @@ export default function AppLayout() {
   if (!fontsLoaded || !authChecked) return null;
 
   return (
-    <PaperProvider theme={{ fonts: { labelMedium: { fontFamily: 'Cairo' } } }}>
+    <PaperProvider theme={{ }}>
       <Navigation />
     </PaperProvider>
   );

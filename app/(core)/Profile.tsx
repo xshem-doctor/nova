@@ -120,8 +120,20 @@ if (!user?.investments?.length) {
   })}
   <Card style={styles.card}>
           <Card.Content>
-            <Text style={styles.title}> إجمالي الربح حتى اليوم</Text>
-            <Text style={styles.amount}>{user.investments.map((inv, index) => (inv.accumulated_reward) )} </Text>
+            <Text style={styles.title}> إجمالي الربح من الاستثمار</Text>
+            <Text style={styles.amount}>
+              {user?.investments?.length
+    ? user.investments.reduce((sum, inv) => sum + parseFloat(inv.accumulated_reward), 0).toFixed(3)
+    : '0.000'}
+              
+              </Text>
+          </Card.Content>
+        </Card>
+
+          <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.title}> إجمالي الربح من الدعوات</Text>
+            <Text style={styles.amount}>{user.referral_reward_total} </Text>
           </Card.Content>
         </Card>
 </View>

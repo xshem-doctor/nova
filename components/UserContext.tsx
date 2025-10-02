@@ -21,6 +21,7 @@ type User = {
   balance: string;
   referral_code: string;
   invited_users : string;
+  referral_reward_total : string;
   vip_users : string;
   is_vip : string,
   investments: Investment[]; // 👈 Add this
@@ -93,6 +94,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             balance: `${data.wallet.balance} USDT`,
             referral_code: `${data.referral_code}`,
             invited_users : `${data.invited_users}`,
+            referral_reward_total : `${data.wallet.referral_reward_total}`,
             vip_users : `${data.vip_users}`,
             is_vip : `${data.is_vip}`,
             investments: data.investments.map((inv: any) => ({

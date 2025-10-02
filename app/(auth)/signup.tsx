@@ -23,6 +23,7 @@ export default function SignUp() {
       }
     }, [ref]);
 
+    
 
   const handleRegister = async () => {
   try {
