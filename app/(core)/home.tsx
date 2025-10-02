@@ -3,13 +3,22 @@ import StakingCalculator from '@/components/StakingCalculator';
 import Clipboard from '@react-native-clipboard/clipboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Card, Text } from 'react-native-paper';
 import { router } from 'expo-router';
 import { useUser } from '@/components/UserContext';
+import ErrorDialog from '@/components/ErrorDialog';
 
 export default function Home() {
+ const [errorVisible, setErrorVisible] = useState(false);
+     const [errorMessage, setErrorMessage] = useState('');
  
+     const showError = (msg: string) => {
+       setErrorMessage(msg);
+       setErrorVisible(true);
+     };
+
+
   const { user, loading } = useUser();
   if (loading) {
     return (
@@ -30,6 +39,12 @@ export default function Home() {
 
   return (
     <ScrollView>
+
+      <ErrorDialog
+                visible={errorVisible}
+                message={errorMessage}
+                onDismiss={() => setErrorVisible(false)}
+              />
       <Card style={styles.card}>
         <Card.Title
           title={user.name}
@@ -51,7 +66,7 @@ export default function Home() {
 
               onPress={() => {
                 Clipboard.setString(user.referral_code);
-                Alert.alert('تم النسخ', 'تم نسخ العنوان إلى الحافظة');
+               showError('تم نسخ العنوان إلى الحافظة');
               }}
               style={styles.button}
             >
@@ -63,7 +78,7 @@ export default function Home() {
 
               onPress={() => {
                 Clipboard.setString(user.wallet);
-                Alert.alert('تم النسخ', 'تم نسخ العنوان إلى الحافظة');
+                showError('تم نسخ العنوان إلى الحافظة');
               }}
               style={styles.button}
             >

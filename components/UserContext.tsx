@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
 import { router } from 'expo-router';
+import ErrorDialog from './ErrorDialog';
 
 type Investment = {
   amount: string;
@@ -23,7 +23,7 @@ type User = {
   invited_users : string;
   vip_users : string;
   is_vip : string,
-    investments: Investment[]; // 👈 Add this
+  investments: Investment[]; // 👈 Add this
 
 };
 
@@ -37,6 +37,15 @@ const UserContext = createContext<UserContextType>({ user: null, loading: true }
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [errorVisible, setErrorVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    
+    const showError = (msg: string) => {
+          setErrorMessage(msg);
+          setErrorVisible(true);
+    };
+
+
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -74,11 +83,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           await AsyncStorage.removeItem('Token');
           router.replace('/(auth)/login');
         } else {
-          Alert.alert('خطأ', 'فشل في جلب بيانات المستخدم');
+          showError('خطأ' + 'فشل في جلب بيانات المستخدم');
         }
       } catch (error) {
         console.error(error);
-        Alert.alert('خطأ', 'تعذر الاتصال بالخادم');
+        showError('خطأ' + 'تعذر الاتصال بالخادم');
       } finally {
         setLoading(false);
       }
@@ -89,6 +98,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <UserContext.Provider value={{ user, loading }}>
+      <ErrorDialog
+                  visible={errorVisible}
+                  message={errorMessage}
+                  onDismiss={() => setErrorVisible(false)}
+                />
       {children}
     </UserContext.Provider>
   );

@@ -12,7 +12,7 @@ export default function ErrorDialog({ visible, message, onDismiss }: Props) {
   return (
     <Portal>
     <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>حدث خطأ</Dialog.Title>
+        <Dialog.Title ><Button icon="message-alert-outline">تنويه</Button></Dialog.Title>
         <Dialog.Content>
         <Text>{message}</Text>
         </Dialog.Content>

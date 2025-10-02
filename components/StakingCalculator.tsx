@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ErrorDialog from './ErrorDialog';
+import { useUser } from './UserContext';
 
 const tiers = [
   { name: 'فضي', min: 10, max: 100, rate: 0.20 },
@@ -11,6 +13,18 @@ const tiers = [
 ];
 
 export default function StakingCalculator() {
+  const { user, loading } = useUser();
+  
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  
+  const showError = (msg: string) => {
+        setErrorMessage(msg);
+        setErrorVisible(true);
+  };
+
+
+
   const [amount, setAmount] = useState('');
   const [token, setToken] = useState('');
   const [investmentData, setInvestmentData] = useState(null);
@@ -27,7 +41,12 @@ export default function StakingCalculator() {
 
   const handleInvestNow = async () => {
     if (!tier) {
-      Alert.alert('❌ خطأ', 'أدخل مبلغ صالح للاستثمار (أعلى من 10)');
+      showError('❌ خطأ'+ 'أدخل مبلغ صالح للاستثمار (أعلى من 10)');
+      return;
+    }
+    const balance = parseFloat(user?.balance || '0');
+    if (balance < 10) {
+      showError('❌ خطأ'+ 'رصيدك غير كافي (تحتاج إيداع)');
       return;
     }
 
@@ -44,20 +63,25 @@ export default function StakingCalculator() {
       const data = await res.json();
       if (data.success) {
         setInvestmentData(data);
-        Alert.alert('✅ تم الاستثمار', `الربح اليومي: ${data.daily_reward} دولار`);
+        showError('✅ تم الاستثمار' + `الربح اليومي: ${data.daily_reward} `);
       } else {
-        Alert.alert('❌ خطأ', data.message || data.error);
+        showError('❌ خطأ' + data.message || data.error);
       }
     } catch (err) {
-      Alert.alert('❌ فشل الاتصال', 'تحقق من الشبكة أو حاول لاحقاً');
+      showError('❌ فشل الاتصال' + 'تحقق من الشبكة أو حاول لاحقاً');
     }
   };
 
   return (
     <Card style={styles.card}>
+      <ErrorDialog
+            visible={errorVisible}
+            message={errorMessage}
+            onDismiss={() => setErrorVisible(false)}
+          />
       <Card.Content>
         <TextInput
-          label="💰 أدخل مبلغ الاستثمار"
+          label=" أدخل مبلغ الاستثمار"
           value={amount}
           onChangeText={setAmount}
           keyboardType="numeric"
@@ -72,7 +96,7 @@ export default function StakingCalculator() {
         <Button
           mode="contained"
           icon="cash-lock"
-          onPress={handleInvestNow}
+          onPress={() => handleInvestNow()}
           style={styles.button}
         >
           استثمر الآن

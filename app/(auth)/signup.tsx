@@ -5,7 +5,13 @@ import { Button, Text, TextInput, useTheme } from 'react-native-paper';
 import ArabicText from '../../components/ArabicText';
 
 export default function SignUp() {
+    const [errorVisible, setErrorVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
+    const showError = (msg: string) => {
+      setErrorMessage(msg);
+      setErrorVisible(true);
+    };
   const handleRegister = async () => {
   try {
     const response = await fetch('https://novaplatform.pythonanywhere.com/api/register/', {
@@ -23,13 +29,13 @@ export default function SignUp() {
 
     const data = await response.json();
     if (response.ok) {
-      alert('تم إنشاء الحساب بنجاح');
+      showError(' تم إنشاء الحساب الرجاء تسجيل الدخول'  );
       router.push('/login');
     } else {
-      alert('حدث خطأ: ' + JSON.stringify(data));
+      showError('حدث خطأ: ' + JSON.stringify(data));
     }
   } catch (error) {
-    alert('فشل الاتصال بالخادم');
+    showError('الرجاء المحاولة لاحقاً: فشل الاتصال بالخادم');
     console.error(error);
   }
 };
