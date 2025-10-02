@@ -91,7 +91,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             name: data.username,
             email : data.email,
             wallet: data.wallet.address,
-            balance: `${data.wallet.balance} USDT`,
+            balance: `${data.wallet.balance} TRX`,
             referral_code: `${data.referral_code}`,
             invited_users : `${data.invited_users}`,
             referral_reward_total : `${data.wallet.referral_reward_total}`,

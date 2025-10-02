@@ -54,7 +54,7 @@ const ProfileScreen = () => {
       />
 
       <List.Item
-        title=": التسجيلات"
+        title=": اجمالي الدعوات"
         right={props => <List.Icon {...props} icon="share-outline" />}
         left={props =>  <ArabicText>{user.invited_users}</ArabicText>}
       />
@@ -101,7 +101,7 @@ if (!user?.investments?.length) {
         <List.Item
           title=":الربح الشهري"
           right={props => <List.Icon {...props} icon="badge-account-outline" />}
-          left={props => <ArabicText>{(parseFloat(inv.daily_reward) * 30).toFixed(2)} USDT</ArabicText>}
+          left={props => <ArabicText>{(parseFloat(inv.daily_reward) * 30).toFixed(2)} TRX</ArabicText>}
         />
         <List.Item
           title=": حالة الاستثمار"
