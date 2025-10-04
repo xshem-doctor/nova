@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, Avatar, Button, Divider, List, Card } from 'react-native-paper';
+import { Text, Avatar, Button, Divider, List, Card, Chip } from 'react-native-paper';
 import { useUser } from '@/components/UserContext';
 import { router } from 'expo-router';
 import ArabicText from '@/components/ArabicText';
@@ -50,7 +50,7 @@ const ProfileScreen = () => {
       <List.Item
         title=": الحالة"
         right={props => <List.Icon {...props} icon="check-decagram" />}
-        left={props =>  <ArabicText>{user.is_vip === '1' ? 'نشط' : ' غير نشط تحتاج الإيداع'}</ArabicText>}
+        left={props =>  <ArabicText style={{color:"#21e61aff"}}>{user.is_vip === 'true' ? 'نشط' : ' غير نشط تحتاج الإيداع'}</ArabicText>}
       />
 
       <List.Item
@@ -60,11 +60,10 @@ const ProfileScreen = () => {
       />
 
       <List.Item
-        title=": المستثمرون النشطون"
+        title=": الدعوات النشطة"
         right={props => <List.Icon {...props} icon="share" />}
         left={props =>  <ArabicText>{user.vip_users}</ArabicText>}
       />
-
 
 <View style={styles.container}>
   
@@ -84,7 +83,8 @@ if (!user?.investments?.length) {
     } else
       return (
       <View key={index}>
-        <Text style={styles.title}>الاستثمار {index + 1}</Text>
+        {/* <Text style={styles.title}>الاستثمار {index + 1}</Text> */}
+        <Chip style={{direction: "rtl"}} icon="account-cash" onPress={() => console.log('Pressed')}> الاستثمار {index + 1}</Chip>
 
         <List.Item
           title=":المبلغ المستثمر"

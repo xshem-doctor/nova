@@ -20,11 +20,7 @@ const InvestmentBox: React.FC<InvestmentBoxProps> = ({ title, text1, text2, text
             <Text>{text2}</Text>
             <Text>{text3}</Text>
         </View>
-      
-
-
         </View>
-        
       </Card.Content>
     </Card>
   );

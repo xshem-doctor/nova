@@ -35,6 +35,7 @@ const Navigation = () => {
           navigationState={{ index, routes }}
           onIndexChange={setIndex}
           renderScene={renderScene}
+            activeColor="#6200ee"      // Focused icon color
         />
       </PaperProvider>
     </UserProvider>

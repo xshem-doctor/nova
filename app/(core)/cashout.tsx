@@ -55,7 +55,7 @@ export default function CashOut() {
 
     const data = await response.json();
     if (response.ok) {
-      showError(`تم إرسال ${data.amount} TRX بنجاح. معرف المعاملة: ${data.txid}`);
+      showError(`تم إرسال ${data.amount} TRX بنجاح الرحاء الانتظار بعض الوقت للموافقة. معرف المعاملة: ${data.to_address}`);
     } else {
       showError(`خطأ: ${data.error}`);
     }

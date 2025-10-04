@@ -9,6 +9,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useUser } from '@/components/UserContext';
 import ErrorDialog from '@/components/ErrorDialog';
 import { Linking } from 'react-native';
+import AppHeader from '@/components/AppHeader';
+import InfoBox from '@/components/InfoBox';
+
 
 export default function Home() {
   const { user, loading } = useUser();
@@ -51,26 +54,33 @@ export default function Home() {
     );
   }
 
+
+    const lines = [
+    'كل ثلاث مستثمرين بملغ 100$  عن طريق رابط الإحالة الخاص بك جائزة 100$' ,
+    ' كل خمس مستثمرين بملغ 100$  عن طريق رابط الإحالة الخاص بك جائزة 200$ ',
+    ' كل عشرة مستثمرين 100$  عن طريق رابط الإحالة الخاص بك جائزة 500$ ',
+    ' ملاحظة : نظام المكافأت يبدأ من 1/10 وينتهي 20/10 ',
+    'THE NOVA IS THE BEST⚡⚡⚡',
+
+    ];
+
   return (
     <ScrollView>
-
+      <AppHeader user={user} />
       <ErrorDialog
                 visible={errorVisible}
                 message={errorMessage}
                 onDismiss={() => setErrorVisible(false)}
               />
       <Card style={styles.card}>
-        <Card.Title
-          title={user.name}
-          left={(props) => <Avatar.Text {...props} label={user.name[0]} />}
-        />
+
         <Card.Content>
           <Text style={styles.label}> الرصيد</Text>
           <Text style={styles.value}>{user.balance}</Text>
           <Text style={styles.msg}>{user?.investments?.length ? 'الرصيد مقفل حتى انتهاء الاستثمار' : ""}</Text>
 
           <Text style={styles.label}> عنوان المحفظة</Text>
-          <Text style={styles.value}>{user.wallet}</Text>
+          <Text style={styles.value}>{user.wallet.slice(0, 20) + "..."}</Text>
 
           <Text style={styles.label}> كود الإحالة</Text>
           <Text style={styles.value}>{user.referral_code}</Text>
@@ -103,6 +113,8 @@ export default function Home() {
         </Card.Content>
       </Card>
       <StakingCalculator />
+
+      <InfoBox title={' نظام الجوائز لمهام شهر أكتوبر '} lines={lines} />
 
       {/* Investment tiers */}
       <InvestmentBox
@@ -146,7 +158,6 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   card: {
-    marginTop: 30,
     elevation: 3,
     borderRadius: 10,
   },
