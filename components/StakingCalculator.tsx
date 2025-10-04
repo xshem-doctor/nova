@@ -97,6 +97,7 @@ export default function StakingCalculator() {
         <Text style={styles.result}>الربح اليومي: {dailyProfit} دولار</Text>
 
         <Button
+        
           mode="contained"
           icon="cash-lock"
           onPress={() => handleInvestNow()}
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginVertical: 4,
-    color: '#6750A4',
+    color: '#6200ee',
   },
   button: {
     marginTop: 16,

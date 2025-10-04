@@ -2,7 +2,7 @@ import ArabicText from '@/components/ArabicText';
 import Clipboard from '@react-native-clipboard/clipboard';
 import * as React from 'react';
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
-import { Appbar, Button, Card, RadioButton } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Button, Card, RadioButton } from 'react-native-paper';
 import { useUser } from '@/components/UserContext';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -49,6 +49,7 @@ const [errorVisible, setErrorVisible] = useState(false);
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} />
         <ArabicText style={styles.loadingText}>جاري تحميل البيانات...</ArabicText>
       </View>
     );

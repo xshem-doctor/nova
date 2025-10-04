@@ -4,13 +4,14 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Avatar, Button, Card, Text } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Button, Card, Text } from 'react-native-paper';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useUser } from '@/components/UserContext';
 import ErrorDialog from '@/components/ErrorDialog';
 import { Linking } from 'react-native';
 import AppHeader from '@/components/AppHeader';
 import InfoBox from '@/components/InfoBox';
+import FabMenu from '@/components/FabMenu';
 
 
 export default function Home() {
@@ -29,6 +30,14 @@ export default function Home() {
     }
   }, [user]);
 
+useEffect(() => {
+   console.log('Injecting Respond.io widget...');
+    const script = document.createElement('script');
+    script.src = 'https://cdn.respond.io/webchat/widget/widget.js?cId=0381bcfa4001fb32d107b4a68a9e3ac';
+    script.id = 'respondio__widget';
+    document.body.appendChild(script);
+}, []);
+
 
      const showError = (msg: string) => {
        setErrorMessage(msg);
@@ -40,6 +49,7 @@ export default function Home() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} />
         <Text style={styles.loadingText}>جاري تحميل البيانات...</Text>
       </View>
     );
@@ -55,6 +65,7 @@ export default function Home() {
   }
 
 
+
     const lines = [
     'كل ثلاث مستثمرين بملغ 100$  عن طريق رابط الإحالة الخاص بك جائزة 100$' ,
     ' كل خمس مستثمرين بملغ 100$  عن طريق رابط الإحالة الخاص بك جائزة 200$ ',
@@ -67,6 +78,14 @@ export default function Home() {
   return (
     <ScrollView>
       <AppHeader user={user} />
+      <FabMenu
+      position="bottom-left"
+      actions={[
+        { icon: 'robot-confused-outline', label: 'الدعم وخدمة العملاء', onPress: () => Linking.openURL('https://t.me/novacoinupBot'), },
+        // { icon: 'star', label: 'Star', onPress: () => console.log('Star') },
+      ]}
+    />
+
       <ErrorDialog
                 visible={errorVisible}
                 message={errorMessage}
@@ -87,7 +106,7 @@ export default function Home() {
 
           <View style={styles.buttonRow}>
             <Button
-                      mode="outlined"
+              mode="outlined"
 
               onPress={() => {
                 Clipboard.setString(referralUrl);
@@ -99,8 +118,7 @@ export default function Home() {
             </Button>
 
             <Button
-                    mode="contained"
-
+              mode="contained"
               onPress={() => {
                 Clipboard.setString(user.wallet);
                 showError('تم نسخ العنوان إلى الحافظة');
@@ -119,26 +137,26 @@ export default function Home() {
       {/* Investment tiers */}
       <InvestmentBox
         title="💰 المستوى: فضي"
-        text1="📦 سعر الاستثمار: 10 -> 100"
+        text1="$ سعر الاستثمار:من 10 الى 100"
         text2="📈 سعر الفائدة بالمئة: 20"
         text3="💵 الربح: 2 - 20 دولار"
       />
       <InvestmentBox
         title="💰 المستوى: الذهبي"
-        text1="📦 سعر الاستثمار: 101 -> 1000"
-        text2="📈 سعر الفائدة بالمئة: 25 "
+        text1="$ سعر الاستثمار: من 101 إلى 1000"
+        text2=" سعر الفائدة بالمئة: 25 "
         text3="💵 الربح: 25 - 250 دولار"
       />
       <InvestmentBox
         title="💰 المستوى: بلاتين"
-        text1="📦 سعر الاستثمار: 1001 -> 10.000"
-        text2="📈 سعر الفائدة بالمئة: 30"
+        text1="$ سعر الاستثمار: من 1001 الى 10.000"
+        text2=" سعر الفائدة بالمئة: 30"
         text3="💵 الربح: 300 - 3000 دولار"
       />
       <InvestmentBox
         title="💰 المستوى: ألماسي"
-        text1="📦 سعر الاستثمار: 10.001 -> 100.000"
-        text2="📈 سعر الفائدة بالمئة: 50"
+        text1="$ سعر الاستثمار: من 10.001 إلى 100.000"
+        text2=" سعر الفائدة بالمئة: 50"
         text3="💵 الربح: 5000 - 50.000 دولار"
       />
 

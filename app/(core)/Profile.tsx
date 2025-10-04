@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, Avatar, Button, Divider, List, Card, Chip } from 'react-native-paper';
+import { Text, Avatar, Button, Divider, List, Card, Chip, ActivityIndicator } from 'react-native-paper';
 import { useUser } from '@/components/UserContext';
 import { router } from 'expo-router';
 import ArabicText from '@/components/ArabicText';
@@ -9,13 +9,14 @@ const ProfileScreen = () => {
 
 
   const { user, loading } = useUser();
-    if (loading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>جاري تحميل البيانات...</Text>
-        </View>
-      );
-    }
+      if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} />
+        <ArabicText style={styles.loadingText}>جاري تحميل البيانات...</ArabicText>
+      </View>
+    );
+  }
   
     if (!user) {
       return (
@@ -113,7 +114,6 @@ if (!user?.investments?.length) {
             </ArabicText>
           )}
         />
-        <Divider />
 
       </View>
     );
